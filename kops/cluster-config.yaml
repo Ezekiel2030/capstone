@@ -48,8 +48,6 @@ spec:
     allowContainerRegistry: true
     legacy: false
     useServiceAccountExternalPermissions: true
-  kubeProxy:
-    enabled: false
   kubelet:
     anonymousAuth: false
   kubernetesApiAccess:
@@ -58,10 +56,9 @@ spec:
   kubernetesVersion: 1.35.3
   masterPublicName: api.clusters.ezekiel20.online
   networkCIDR: 10.0.0.0/16
-  networkID: vpc-01d27554519c663ce
+  networkID: vpc-012b130a81350b79e
   networking:
-    cilium:
-      enableNodePort: true
+    calico: {}
   nonMasqueradeCIDR: 100.64.0.0/10
   serviceAccountIssuerDiscovery:
     discoveryStore: s3://taskapp-ezekiel-kops-state/clusters.ezekiel20.online/discovery
@@ -71,32 +68,32 @@ spec:
   - ::/0
   subnets:
   - cidr: 10.0.101.0/24
-    id: subnet-0e2b4153f1e9fa1d1
+    id: subnet-031390d9954634d4a
     name: eu-west-1a
     type: Private
     zone: eu-west-1a
   - cidr: 10.0.102.0/24
-    id: subnet-0d0f452379f3fc6cd
+    id: subnet-084bae3da21ede1ec
     name: eu-west-1b
     type: Private
     zone: eu-west-1b
   - cidr: 10.0.103.0/24
-    id: subnet-06ce847c793edd99e
+    id: subnet-037f789f4ab8045c7
     name: eu-west-1c
     type: Private
     zone: eu-west-1c
   - cidr: 10.0.1.0/24
-    id: subnet-0dd1404d4ebc396c3
+    id: subnet-0fe7656c7c1df4846
     name: utility-eu-west-1a
     type: Utility
     zone: eu-west-1a
   - cidr: 10.0.2.0/24
-    id: subnet-044b3872ade5f47e1
+    id: subnet-003b7c641af103508
     name: utility-eu-west-1b
     type: Utility
     zone: eu-west-1b
   - cidr: 10.0.3.0/24
-    id: subnet-0534cb11aa79d50ed
+    id: subnet-0757bfcf52f6f1d3b
     name: utility-eu-west-1c
     type: Utility
     zone: eu-west-1c
@@ -239,5 +236,5 @@ metadata:
     kops.k8s.io/cluster: clusters.ezekiel20.online
   name: admin
 spec:
-  publicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgVHQluPEPmxT5yUBxOttel7h52N5KLTAKcEJqjF58khULzVYV/xtbqbdwyQ4CsprLUuyEMns/Ccl4UofrQtpF56YkF2saTYDKJSukSAGBd3wiVlKFpu+VMNuikEgSjlSt1SsszOFbhP9DmFfUm3+U4JZtchmjoNZCQhoqBsatSe1JgELZwLPJbiol3iP9c67iH8HNpsJiU12nWBge3sM4uSLLFU86eEdWAcVxFoyjg/gPWK1jbluBB+yHQfBs+FPVxFxbEOpKW59fVO9mZfCFMVNuLBd2i5ivi42K/lwgxCN+dM2tXp/gHVkGhnLB+5VJI7bhRx9yYeoScShJFs7+l3kLwYNyugJsYy92vMOZ1hkMsy7In3OcJuDAD6Up3nXdx7S2pyayTRZck08sgDvTTjVM91XjgeKcuByrpfsjASTa9SKRhbilV1T5QTcWjAdhMvTbGDq6QUHeDJ40IBfnP/ABUpnVFt0TGaOjo01x9JnLOgGD34Ot/cJs/JCnMrQBWOwjVUCby5dENlxAhkpF0aH39awaL8rntUGV/TOS0OTDlv+WnrMGLTxASyDnD7v3ub8j6pDOTbKoiKV+5ut64lzW1yliwQlP0aDcelR0uS5Qvvcrd3x5DuDLJ9CwtCyMkdlB9Yb14Y/32gLbaQy+V2+awDCaWS2jsouSyb2Bhw==
+  publicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDGLRPBJToniRY0TWwMcPgFlhMlthZy3I+ni2nt5gs2+qx6CFD1EmKkVmT+f5FxLh65qihOOfi02qgJfLUohjDoTp3lmcK2rthFi1PH72Olo7SqdMULAwuIQ5Hzq55zSIG9y5zlk+jWpO/t+gaZCAXCrt7K6F7Zlg5Be2gaVGsnvjDeY3np64z9nbhQgMfvXN9fBeRz/jN0KV/n3eM/y5wbQCC105Ap7Sfg+OlgHTml2BvEHf+Zv68JvEZMvG6O+hwSG2gkqH75hgRqR+YSd9I9pvZu6Pu1b1OXKQ3uYy6fWmzwm4IvRuhk6+yopKvSuUM6f4m3Q9EkKV5p9NtscYHhsjLARN7DIyoyKG5dhSziaSLjQatRhCAY33+06Trbr1tla5djFso4t6uX924FCRQyF6DUaexLkrHvMWe7gNlyVM+XZf1UJAG5dqCEwy7IGULkNYxVG8RC4s+r48+ln42wU1YM6Ia1ktbwdRPlgQhxANruYxWkE6bbvbN5q8seP1eE2uD1JtxksRCMIRtkdA3XsokxODaapCnSuihVy6rKAvNCU/vUdyJpf2N/qM4VTvAUyU2Weu6AQb0Sl1K83xH+A2UKZ3HwyZvGNfHdbfFDnNaZLDQnXhbVUCRlvTszEIXpHqbSfkyZII1QhV1RU+Cy04AauS8Ha2MzBsSg+lqinw==
     ezekiel@ubuntu

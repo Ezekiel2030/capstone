@@ -14,13 +14,13 @@ STATE_STORE=taskapp-ezekiel-kops-state
 AWS_REGION=eu-west-1
 
 # 4. Your VPC ID
-VPC_ID=vpc-01d27554519c663ce
+VPC_ID=vpc-012b130a81350b79e
 
 # 5. Your private subnets (comma-seperated)
-PRIVATE_SUBNETS=subnet-0e2b4153f1e9fa1d1,subnet-0d0f452379f3fc6cd,subnet-06ce847c793edd99e
+PRIVATE_SUBNETS=subnet-031390d9954634d4a,subnet-084bae3da21ede1ec,subnet-037f789f4ab8045c7
 
 # 6. Your public subnets (comma-seperated)
-PUBLIC_SUBNETS=subnet-0dd1404d4ebc396c3,subnet-044b3872ade5f47e1,subnet-0534cb11aa79d50ed
+PUBLIC_SUBNETS=subnet-0fe7656c7c1df4846,subnet-003b7c641af103508,subnet-0757bfcf52f6f1d3b
 
 echo "Make sure you edit all the required variables before running this script"
 echo "Variables are denoted with <>"
@@ -35,7 +35,7 @@ echo ""
 
 #kOps CLI configuration for yaml
 echo "Creating kOps cluster yaml file with all neccesary flags"
-kops create cluster  --name=${NAME} --state=s3://${STATE_STORE} --network-id=${VPC_ID} --subnets=${PRIVATE_SUBNETS} --utility-subnets=${PUBLIC_SUBNETS} --zones=${AWS_REGION}a,${AWS_REGION}b,${AWS_REGION}c --ssh-public-key=~/.ssh/id_rsa_kops.pub --control-plane-zones=${AWS_REGION}a,${AWS_REGION}b,${AWS_REGION}c --topology=private --networking=cilium --set="spec.serviceAccountIssuerDiscovery.discoveryStore=s3://${STATE_STORE}/${NAME}/discovery" --set="spec.iam.useServiceAccountExternalPermissions=true" --set="spec.serviceAccountIssuerDiscovery.enableAWSOIDCProvider=true" --control-plane-count=3 --node-count=3 --node-size=t3a.medium --control-plane-size=t3a.medium --dns-zone=${NAME} --bastion="true" --dry-run -o yaml > cluster-config.yaml
+kops create cluster  --name=${NAME} --state=s3://${STATE_STORE} --network-id=${VPC_ID} --subnets=${PRIVATE_SUBNETS} --utility-subnets=${PUBLIC_SUBNETS} --zones=${AWS_REGION}a,${AWS_REGION}b,${AWS_REGION}c --ssh-public-key=~/.ssh/id_rsa_kops.pub --control-plane-zones=${AWS_REGION}a,${AWS_REGION}b,${AWS_REGION}c --topology=private --networking=calico --set="spec.serviceAccountIssuerDiscovery.discoveryStore=s3://${STATE_STORE}/${NAME}/discovery" --set="spec.iam.useServiceAccountExternalPermissions=true" --set="spec.serviceAccountIssuerDiscovery.enableAWSOIDCProvider=true" --control-plane-count=3 --node-count=3 --node-size=t3a.medium --control-plane-size=t3a.medium --dns-zone=${NAME} --bastion="true" --dry-run -o yaml > cluster-config.yaml
 
 echo ""
 
