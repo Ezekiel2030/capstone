@@ -1,0 +1,243 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  name: clusters.ezekiel20.online
+spec:
+  api:
+    loadBalancer:
+      class: Network
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://taskapp-ezekiel-kops-state/clusters.ezekiel20.online
+  dnsZone: clusters.ezekiel20.online
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-west-1a
+      name: a
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-west-1b
+      name: b
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-west-1c
+      name: c
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-west-1a
+      name: a
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-west-1b
+      name: b
+    - encryptedVolume: true
+      instanceGroup: control-plane-eu-west-1c
+      name: c
+    manager:
+      backupRetentionDays: 90
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+    useServiceAccountExternalPermissions: true
+  kubeProxy:
+    enabled: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  - ::/0
+  kubernetesVersion: 1.35.3
+  masterPublicName: api.clusters.ezekiel20.online
+  networkCIDR: 10.0.0.0/16
+  networkID: vpc-01d27554519c663ce
+  networking:
+    cilium:
+      enableNodePort: true
+  nonMasqueradeCIDR: 100.64.0.0/10
+  serviceAccountIssuerDiscovery:
+    discoveryStore: s3://taskapp-ezekiel-kops-state/clusters.ezekiel20.online/discovery
+    enableAWSOIDCProvider: true
+  sshAccess:
+  - 0.0.0.0/0
+  - ::/0
+  subnets:
+  - cidr: 10.0.101.0/24
+    id: subnet-0e2b4153f1e9fa1d1
+    name: eu-west-1a
+    type: Private
+    zone: eu-west-1a
+  - cidr: 10.0.102.0/24
+    id: subnet-0d0f452379f3fc6cd
+    name: eu-west-1b
+    type: Private
+    zone: eu-west-1b
+  - cidr: 10.0.103.0/24
+    id: subnet-06ce847c793edd99e
+    name: eu-west-1c
+    type: Private
+    zone: eu-west-1c
+  - cidr: 10.0.1.0/24
+    id: subnet-0dd1404d4ebc396c3
+    name: utility-eu-west-1a
+    type: Utility
+    zone: eu-west-1a
+  - cidr: 10.0.2.0/24
+    id: subnet-044b3872ade5f47e1
+    name: utility-eu-west-1b
+    type: Utility
+    zone: eu-west-1b
+  - cidr: 10.0.3.0/24
+    id: subnet-0534cb11aa79d50ed
+    name: utility-eu-west-1c
+    type: Utility
+    zone: eu-west-1c
+  topology:
+    bastion:
+      bastionPublicName: bastion.clusters.ezekiel20.online
+    dns:
+      type: Public
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: clusters.ezekiel20.online
+  name: control-plane-eu-west-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3a.medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - eu-west-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: clusters.ezekiel20.online
+  name: control-plane-eu-west-1b
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3a.medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - eu-west-1b
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: clusters.ezekiel20.online
+  name: control-plane-eu-west-1c
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3a.medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - eu-west-1c
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: clusters.ezekiel20.online
+  name: nodes-eu-west-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3a.medium
+  maxPrice: "0.025"
+  maxSize: 1
+  minSize: 1
+  role: Node
+  subnets:
+  - eu-west-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: clusters.ezekiel20.online
+  name: nodes-eu-west-1b
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3a.medium
+  maxPrice: "0.025"
+  maxSize: 1
+  minSize: 1
+  role: Node
+  subnets:
+  - eu-west-1b
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: clusters.ezekiel20.online
+  name: nodes-eu-west-1c
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3a.medium
+  maxPrice: "0.025"
+  maxSize: 1
+  minSize: 1
+  role: Node
+  subnets:
+  - eu-west-1c
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: clusters.ezekiel20.online
+  name: bastions
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
+  machineType: t3.micro
+  maxSize: 1
+  minSize: 1
+  role: Bastion
+  subnets:
+  - eu-west-1a
+  - eu-west-1b
+  - eu-west-1c
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: SSHCredential
+metadata:
+  labels:
+    kops.k8s.io/cluster: clusters.ezekiel20.online
+  name: admin
+spec:
+  publicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgVHQluPEPmxT5yUBxOttel7h52N5KLTAKcEJqjF58khULzVYV/xtbqbdwyQ4CsprLUuyEMns/Ccl4UofrQtpF56YkF2saTYDKJSukSAGBd3wiVlKFpu+VMNuikEgSjlSt1SsszOFbhP9DmFfUm3+U4JZtchmjoNZCQhoqBsatSe1JgELZwLPJbiol3iP9c67iH8HNpsJiU12nWBge3sM4uSLLFU86eEdWAcVxFoyjg/gPWK1jbluBB+yHQfBs+FPVxFxbEOpKW59fVO9mZfCFMVNuLBd2i5ivi42K/lwgxCN+dM2tXp/gHVkGhnLB+5VJI7bhRx9yYeoScShJFs7+l3kLwYNyugJsYy92vMOZ1hkMsy7In3OcJuDAD6Up3nXdx7S2pyayTRZck08sgDvTTjVM91XjgeKcuByrpfsjASTa9SKRhbilV1T5QTcWjAdhMvTbGDq6QUHeDJ40IBfnP/ABUpnVFt0TGaOjo01x9JnLOgGD34Ot/cJs/JCnMrQBWOwjVUCby5dENlxAhkpF0aH39awaL8rntUGV/TOS0OTDlv+WnrMGLTxASyDnD7v3ub8j6pDOTbKoiKV+5ut64lzW1yliwQlP0aDcelR0uS5Qvvcrd3x5DuDLJ9CwtCyMkdlB9Yb14Y/32gLbaQy+V2+awDCaWS2jsouSyb2Bhw==
+    ezekiel@ubuntu
